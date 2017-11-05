@@ -1,0 +1,24 @@
+apply plugin: 'groovy'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.12'
+    testCompile 'junit:junit:4.12'
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src/com/a9ae0b01f0ffc/infinite_tools/main']
+        }
+    }
+
+    test {
+        groovy {
+            srcDirs = ['src/com/a9ae0b01f0ffc/infinite_tools/tests']
+        }
+    }
+}
