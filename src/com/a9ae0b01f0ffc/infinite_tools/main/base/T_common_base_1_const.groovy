@@ -13,6 +13,7 @@ abstract class T_common_base_1_const extends T_common_base_0_uid{
     public static final String GC_AT_CHAR = "@"
     public static final String GC_COMMA = ","
     public static final String GC_COLON = ":"
+    public static final String GC_PLUS = "+"
     public static final Integer GC_EMPTY_SIZE = 0
     public static final Integer GC_FIRST_INDEX = 0
     public static final Integer GC_SECOND_INDEX = 1
@@ -40,6 +41,7 @@ abstract class T_common_base_1_const extends T_common_base_0_uid{
     public static final String GC_XML_DOUBLE_QUOTE = "\""
     public static final String GC_XML_AMP = "&"
     public static final String GC_XML_END = "/"
+    public static final String GC_XML_SLASH = "\\"
     public static final String GC_XML_CDATA_OPEN = "<![CDATA["
     public static final String GC_XML_CDATA_CLOSE = "]]>"
     public static final Integer GC_HTTP_RESP_CODE_OK = 200

@@ -1,5 +1,7 @@
 package base
 
+import groovy.util.slurpersupport.GPathResult
+import groovy.xml.XmlUtil
 import other.E_application_exception
 import other.T_static_string
 
@@ -135,6 +137,20 @@ abstract class T_common_base_3_utils extends T_common_base_2_context {
         return l_result_object
     }
 
+    static final Object nvl_empty_map(Object i_primary_object, Object i_backup_object) {
+        Object l_result_object
+        if (is_null(i_primary_object)) {
+            l_result_object = i_backup_object
+        } else {
+            if (i_primary_object instanceof Map && i_primary_object.isEmpty()) {
+                l_result_object = i_backup_object
+            } else {
+                l_result_object = i_primary_object
+            }
+        }
+        return l_result_object
+    }
+
     static final String last_chars(String i_string, Integer i_how_much_chars) {
         if (is_null(i_string)) {
             return GC_EMPTY_STRING
@@ -182,6 +198,49 @@ abstract class T_common_base_3_utils extends T_common_base_2_context {
             l_inverted_hash_map.put(l_entry.getValue(), l_entry.getKey())
         }
         return l_inverted_hash_map
+    }
+
+    static ConfigObject convert_xml_properties_into_text_properties(String i_properties_string) {
+        ConfigObject l_config_object
+        if (validate_xml(i_properties_string, GC_TRUE)) {
+            String l_properties_string = GC_EMPTY_STRING
+            GPathResult l_gpathresult
+            l_gpathresult = (GPathResult) new XmlSlurper().parse(new StringReader(i_properties_string))
+            for (l_child_node in l_gpathresult.children()) {
+                l_properties_string += l_child_node.name() + GC_EQUALS + l_child_node.@value.text() + System.lineSeparator()
+            }
+            Properties l_properties = new Properties()
+            System.out.println(l_properties_string)
+            l_properties.load(new StringReader(l_properties_string.replace(GC_XML_SLASH, GC_XML_SLASH + GC_XML_SLASH)))
+            l_config_object = new ConfigSlurper().parse(l_properties)
+        } else {
+            l_config_object = new ConfigSlurper().parse(i_properties_string)
+        }
+        return l_config_object
+    }
+
+    static Object instantiate(String i_interface_name) {
+        return Class.forName(i_interface_name).newInstance()
+    }
+
+    static String format_xml(String i_xml) {
+        return XmlUtil.serialize(i_xml)
+    }
+
+    static Boolean validate_xml(String i_xml, Boolean i_is_soft = GC_FALSE) {
+        if (is_null(i_xml)) {
+            return GC_TRUE
+        }
+        try {
+            String l_formatted_payload = format_xml(i_xml)
+            return GC_TRUE
+        } catch (Exception e_others2) {
+            if (i_is_soft) {
+                return GC_FALSE
+            } else {
+                throw new E_application_exception(s.Potentially_invalid_XML, i_xml, e_others2)
+            }
+        }
     }
 
 }

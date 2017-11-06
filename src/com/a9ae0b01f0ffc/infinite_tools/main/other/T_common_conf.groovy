@@ -35,7 +35,7 @@ class T_common_conf extends Thread {
     }
 
     void init_config() {
-        p_config_object = new ConfigSlurper().parse(p_config_file.toURI().toURL())
+        p_config_object = convert_xml_properties_into_text_properties(p_config_file.getText())
     }
 
     @Override
