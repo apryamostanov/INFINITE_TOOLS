@@ -18,6 +18,9 @@ class T_common_conf extends Thread {
     private ConfigObject p_config_object = GC_NULL_OBJ_REF as ConfigObject
     private WatchService p_watch_service = FileSystems.getDefault().newWatchService()
 
+    T_common_conf() {
+    }
+
     ConfigObject get_conf() {
         return p_config_object
     }
