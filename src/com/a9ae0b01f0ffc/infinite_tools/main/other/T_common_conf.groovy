@@ -47,11 +47,11 @@ class T_common_conf extends Thread {
             WatchKey l_watch_key = p_watch_service.take()
             for (WatchEvent<?> l_event : l_watch_key.pollEvents()) {
                 final Path l_changed_path = (Path) l_event.context()
-                System.out.println(l_changed_path)
                 if (l_changed_path.endsWith(p_config_file.getName())) {
                     init_config()
                 }
             }
+            l_watch_key.reset()
         }
     }
 

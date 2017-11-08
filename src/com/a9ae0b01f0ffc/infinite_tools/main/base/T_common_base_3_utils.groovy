@@ -210,7 +210,6 @@ abstract class T_common_base_3_utils extends T_common_base_2_context {
                 l_properties_string += l_child_node.name() + GC_EQUALS + l_child_node.@value.text() + System.lineSeparator()
             }
             Properties l_properties = new Properties()
-            System.out.println(l_properties_string)
             l_properties.load(new StringReader(l_properties_string.replace(GC_XML_SLASH, GC_XML_SLASH + GC_XML_SLASH)))
             l_config_object = new ConfigSlurper().parse(l_properties)
         } else {
