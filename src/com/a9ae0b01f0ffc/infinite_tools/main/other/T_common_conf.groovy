@@ -9,8 +9,9 @@ import java.nio.file.WatchKey
 import java.nio.file.WatchService
 
 import static base.T_common_base_3_utils.*
+import static java.nio.file.StandardWatchEventKinds.*
 
-class T_common_conf extends Thread {
+abstract class T_common_conf extends Thread {
 
     private static final String LC_CONF_THREAD_PREFIX = s.CONF_THREAD_
     private String p_conf_file_name = GC_EMPTY_STRING
@@ -25,6 +26,14 @@ class T_common_conf extends Thread {
         return p_config_object
     }
 
+    String get_conf_file_name() {
+        return p_conf_file_name
+    }
+
+    File get_config_file() {
+        return p_config_file
+    }
+
     T_common_conf(String i_conf_file_name) {
         p_conf_file_name = i_conf_file_name
         p_config_file = new File(i_conf_file_name)
@@ -32,13 +41,16 @@ class T_common_conf extends Thread {
         if (not(p_config_file.exists())) {
             throw new E_application_exception(s.Configuration_file_not_found_for_path_Z1, p_config_file.getAbsolutePath())
         }
-        Paths.get(p_config_file.getParent()).register(p_watch_service, StandardWatchEventKinds.ENTRY_MODIFY)
+        Paths.get(p_config_file.getParent()).register(p_watch_service, ENTRY_MODIFY)
         init_config()
         start()
     }
 
+    abstract void refresh_config()
+
     void init_config() {
         p_config_object = convert_xml_properties_into_text_properties(p_config_file.getText())
+        refresh_config()
     }
 
     @Override
@@ -46,12 +58,17 @@ class T_common_conf extends Thread {
         while (GC_TRUE) {
             WatchKey l_watch_key = p_watch_service.take()
             for (WatchEvent<?> l_event : l_watch_key.pollEvents()) {
+                if (l_event.kind() == OVERFLOW) {
+                    continue
+                }
                 final Path l_changed_path = (Path) l_event.context()
                 if (l_changed_path.endsWith(p_config_file.getName())) {
                     init_config()
                 }
             }
-            l_watch_key.reset()
+            if (not(l_watch_key.reset())) {
+                break
+            }
         }
     }
 

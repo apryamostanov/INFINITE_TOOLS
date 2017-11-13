@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 class T_thread_local<T_type> extends T_common_base_3_utils{
 
-    static ConcurrentHashMap<Thread, ConcurrentHashMap<Class, T_type>> p_objects_by_thread_by_class = new ConcurrentHashMap<Thread, ConcurrentHashMap<Class, T_type>>()
+    public static ConcurrentHashMap<Thread, ConcurrentHashMap<Class, T_type>> p_objects_by_thread_by_class = new ConcurrentHashMap<Thread, ConcurrentHashMap<Class, T_type>>()
 
     static void remove(Class i_class){
         if (p_objects_by_thread_by_class.get(Thread.currentThread()) != GC_NULL_OBJ_REF) {

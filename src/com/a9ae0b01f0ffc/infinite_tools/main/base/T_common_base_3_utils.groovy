@@ -3,6 +3,8 @@ package base
 import groovy.util.slurpersupport.GPathResult
 import groovy.xml.XmlUtil
 import other.E_application_exception
+import other.T_dic_country
+import other.T_dic_currency
 import other.T_static_string
 
 import java.text.SimpleDateFormat
@@ -218,6 +220,15 @@ abstract class T_common_base_3_utils extends T_common_base_2_context {
         return l_config_object
     }
 
+    static String decode(String i_search_string, String i_default_value, List<String>... i_match_replacement_pairs) {
+        for (l_match_replacement_pair in i_match_replacement_pairs) {
+            if (l_match_replacement_pair.first() == i_search_string) {
+                return l_match_replacement_pair.last()
+            }
+        }
+        return i_default_value
+    }
+
     static Object instantiate(String i_interface_name) {
         return Class.forName(i_interface_name).newInstance()
     }
@@ -241,5 +252,22 @@ abstract class T_common_base_3_utils extends T_common_base_2_context {
             }
         }
     }
+
+    static final String country_digits(String i_country_chars) {
+        return T_dic_country.GC_123_BY_ABC.get(i_country_chars)
+    }
+
+    static final String country_chars(String i_country_digits) {
+        return T_dic_country.GC_ABC_BY_123.get(i_country_digits)
+    }
+
+    static final String currency_digits(String i_country_chars) {
+        return T_dic_currency.GC_123_BY_ABC.get(i_country_chars)
+    }
+
+    static final String currency_chars(String i_country_digits) {
+        return T_dic_currency.GC_ABC_BY_123.get(i_country_digits)
+    }
+
 
 }
